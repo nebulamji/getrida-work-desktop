@@ -136,7 +136,7 @@ function Chat({
   const [queuedMessages, setQueuedMessages] = useState<QueuedMessage[]>([]);
   const activeTurnRef = useRef<ActiveTurn | null>(null);
   const dashboardChatEnabled = dashboardChatEnabledForConnection(
-    import.meta.env.VITE_HERMES_DESKTOP_DASHBOARD_CHAT,
+    import.meta.env.VITE_GETRIDA_DESKTOP_DASHBOARD_CHAT,
     connectionModeLoaded,
     connectionMode,
     chatTransportPreference,

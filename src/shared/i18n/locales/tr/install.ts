@@ -3,7 +3,7 @@ export default {
   startingInstall: "Kurulum başlatılıyor",
   installationComplete: "Kurulum Tamamlandı",
   installationFailed: "Kurulum Başarısız",
-  installingHermes: "Hermes Agent Kuruluyor",
+  installingHermes: "GetRida Agent Kuruluyor",
   installationFailedHint:
     "Kurulum başarısız oldu. Lütfen tekrar deneyin veya terminal üzerinden kurun.",
   retryInstallation: "Kurulumu Tekrar Dene",
@@ -25,7 +25,7 @@ export default {
   confirmInstallBtn: "Hermes'i Kur",
   useExistingBtn: "Mevcut bir kurulumu kullan",
   useExistingHint:
-    "Mevcut Hermes kurulumunuzu içeren klasörü seçin (hermes-agent klasörünü içeren).",
+    "Mevcut Hermes kurulumunuzu içeren klasörü seçin (getrida-agent klasörünü içeren).",
   useExistingInvalid:
     "Bu klasörde kullanılabilir bir Hermes kurulumu bulunamadı.",
   useExistingDone:

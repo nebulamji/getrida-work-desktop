@@ -1,5 +1,5 @@
 export default {
-  appName: "Hermes One",
+  appName: "GetRida Work Desktop",
   continue: "Lanjutkan",
   cancel: "Batal",
   retry: "Coba lagi",

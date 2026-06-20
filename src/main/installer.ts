@@ -24,18 +24,18 @@ import { HIDDEN_SUBPROCESS_OPTIONS } from "./process-options";
 
 const IS_WINDOWS = process.platform === "win32";
 
-const HERMES_DESKTOP_USER_DATA_DIR =
-  process.env.HERMES_DESKTOP_USER_DATA_DIR?.trim();
-if (HERMES_DESKTOP_USER_DATA_DIR) {
+const GETRIDA_DESKTOP_USER_DATA_DIR =
+  process.env.GETRIDA_DESKTOP_USER_DATA_DIR?.trim();
+if (GETRIDA_DESKTOP_USER_DATA_DIR) {
   try {
-    app.setPath("userData", HERMES_DESKTOP_USER_DATA_DIR);
+    app.setPath("userData", GETRIDA_DESKTOP_USER_DATA_DIR);
   } catch {
     /* best effort: Electron may reject late path changes in tests */
   }
 }
 
 // Resolve the Hermes data directory. Precedence:
-//   1. HERMES_HOME env var if set (install.ps1 sets it User-scope on
+//   1. GETRIDA_HOME env var if set (install.ps1 sets it User-scope on
 //      Windows; users may also override manually for WSL/custom setups).
 //   2. On Windows, probe both candidates and pick whichever already has
 //      data. install.ps1's default is %LOCALAPPDATA%\hermes, but some
@@ -46,7 +46,7 @@ if (HERMES_DESKTOP_USER_DATA_DIR) {
 //      install.ps1's default), ~/.hermes elsewhere.
 //
 // Motivating bug: Electron launched from the Start Menu doesn't always
-// inherit shell-set env vars, so relying on HERMES_HOME alone left
+// inherit shell-set env vars, so relying on GETRIDA_HOME alone left
 // Windows users staring at an empty ~/.hermes while their real data
 // sat in %LOCALAPPDATA%\hermes.
 function looksLikeHermesHome(dir: string): boolean {
@@ -61,33 +61,30 @@ function looksLikeHermesHome(dir: string): boolean {
 }
 
 function defaultHermesHome(): string {
-  const homeDot = join(homedir(), ".hermes");
+  const homeDot = join(homedir(), ".getrida");
   if (!IS_WINDOWS) return homeDot;
 
   const localApp = process.env.LOCALAPPDATA
-    ? join(process.env.LOCALAPPDATA, "hermes")
+    ? join(process.env.LOCALAPPDATA, "getrida")
     : null;
 
-  // Prefer whichever location already has hermes data.
   if (localApp && looksLikeHermesHome(localApp)) return localApp;
   if (looksLikeHermesHome(homeDot)) return homeDot;
 
-  // Neither populated yet — fall back to install.ps1's default so a
-  // fresh install lines up with where the installer will write.
   return localApp ?? homeDot;
 }
 
 // A Hermes home the user explicitly pointed the app at via the "use an
 // existing installation" flow (issue #272). Persisted in the desktop's own
 // userData dir — outside any Hermes home — so it can be read here, before
-// HERMES_HOME is resolved. Strictly additive: with no override file the
+// GETRIDA_HOME is resolved. Strictly additive: with no override file the
 // behaviour is identical to before.
 function hermesHomeOverrideFile(): string {
   // `app` is undefined outside an Electron runtime (e.g. unit tests) —
   // optional-chain it so module load degrades to "no override" instead of
   // throwing.
   const userData = app?.getPath?.("userData");
-  return userData ? join(userData, "hermes-home.json") : "";
+  return userData ? join(userData, "getrida-home.json") : "";
 }
 
 function readHermesHomeOverride(): string {
@@ -95,10 +92,10 @@ function readHermesHomeOverride(): string {
     const file = hermesHomeOverrideFile();
     if (!file || !existsSync(file)) return "";
     const parsed = JSON.parse(readFileSync(file, "utf-8")) as {
-      hermesHome?: unknown;
+      getridaHome?: unknown;
     };
     const p =
-      typeof parsed.hermesHome === "string" ? parsed.hermesHome.trim() : "";
+      typeof parsed.getridaHome === "string" ? parsed.getridaHome.trim() : "";
     // Ignore a stale override whose directory no longer exists.
     return p && existsSync(p) ? p : "";
   } catch {
@@ -117,7 +114,7 @@ export function setHermesHomeOverride(home: string): void {
     }
     writeFileSync(
       file,
-      JSON.stringify({ hermesHome: home.trim() }, null, 2),
+      JSON.stringify({ getridaHome: home.trim() }, null, 2),
       "utf-8",
     );
   } catch {
@@ -125,12 +122,12 @@ export function setHermesHomeOverride(home: string): void {
   }
 }
 
-export const HERMES_HOME =
-  process.env.HERMES_HOME?.trim() ||
+export const GETRIDA_HOME =
+  process.env.GETRIDA_HOME?.trim() ||
   readHermesHomeOverride() ||
   defaultHermesHome();
-export const HERMES_REPO = join(HERMES_HOME, "hermes-agent");
-export const HERMES_VENV = join(HERMES_REPO, "venv");
+export const GETRIDA_REPO = join(GETRIDA_HOME, "hermes-agent");
+export const HERMES_VENV = join(GETRIDA_REPO, "venv");
 // On Windows, use `pythonw.exe` (the GUI-subsystem interpreter that ships in
 // every venv) instead of `python.exe` so that subprocess spawns don't flash
 // a blank console window before `windowsHide: true` / CREATE_NO_WINDOW takes
@@ -142,15 +139,15 @@ export const HERMES_VENV = join(HERMES_REPO, "venv");
 // for it regardless of creation flags. It's a bit-identical interpreter
 // otherwise — same modules, same stdout/stderr behaviour over piped stdio
 // (which is what every call site here uses).
-export const HERMES_PYTHON = IS_WINDOWS
+export const GETRIDA_PYTHON = IS_WINDOWS
   ? join(HERMES_VENV, "Scripts", "pythonw.exe")
   : join(HERMES_VENV, "bin", "python");
 export const HERMES_SCRIPT = IS_WINDOWS
   ? join(HERMES_VENV, "Scripts", "hermes.exe")
-  : join(HERMES_REPO, "hermes");
-export const HERMES_ENV_FILE = join(HERMES_HOME, ".env");
-export const HERMES_CONFIG_FILE = join(HERMES_HOME, "config.yaml");
-export const HERMES_AUTH_FILE = join(HERMES_HOME, "auth.json");
+  : join(GETRIDA_REPO, "hermes");
+export const GETRIDA_ENV_FILE = join(GETRIDA_HOME, ".env");
+export const GETRIDA_CONFIG_FILE = join(GETRIDA_HOME, "config.yaml");
+export const GETRIDA_AUTH_FILE = join(GETRIDA_HOME, "auth.json");
 
 /** The Python + hermes-script paths for a Hermes install rooted at `home`,
  *  in the layout the desktop's own installer produces. */
@@ -173,9 +170,9 @@ export function hermesCliArgs(args: string[] = []): string[] {
 }
 
 function canInvokeHermesCli(): boolean {
-  if (!existsSync(HERMES_PYTHON)) return false;
+  if (!existsSync(GETRIDA_PYTHON)) return false;
   if (IS_WINDOWS) {
-    return existsSync(join(HERMES_REPO, "hermes_cli", "main.py"));
+    return existsSync(join(GETRIDA_REPO, "hermes_cli", "main.py"));
   }
   return existsSync(HERMES_SCRIPT);
 }
@@ -201,12 +198,12 @@ export function getEnhancedPath(): string {
   const extra = (
     IS_WINDOWS
       ? [
-          // Bundled by install.ps1 inside HERMES_HOME — these matter when the
+          // Bundled by install.ps1 inside GETRIDA_HOME — these matter when the
           // user's system PATH doesn't include git or node yet.
-          join(HERMES_HOME, "git", "bin"),
-          join(HERMES_HOME, "git", "cmd"),
-          join(HERMES_HOME, "git", "usr", "bin"),
-          join(HERMES_HOME, "node"),
+          join(GETRIDA_HOME, "git", "bin"),
+          join(GETRIDA_HOME, "git", "cmd"),
+          join(GETRIDA_HOME, "git", "usr", "bin"),
+          join(GETRIDA_HOME, "node"),
           join(HERMES_VENV, "Scripts"),
           // Common user/system installs used when Claw3D setup runs before or
           // outside the bundled installer.
@@ -278,14 +275,14 @@ function resolveNvmBin(home: string): string[] {
 
 function activeEnvFile(profile: string): string {
   return profile === "default"
-    ? HERMES_ENV_FILE
-    : join(HERMES_HOME, "profiles", profile, ".env");
+    ? GETRIDA_ENV_FILE
+    : join(GETRIDA_HOME, "profiles", profile, ".env");
 }
 
 function activeAuthFile(profile: string): string {
   return profile === "default"
-    ? HERMES_AUTH_FILE
-    : join(HERMES_HOME, "profiles", profile, "auth.json");
+    ? GETRIDA_AUTH_FILE
+    : join(GETRIDA_HOME, "profiles", profile, "auth.json");
 }
 
 // Canonical env-var name per known model provider. Keys here are values
@@ -436,11 +433,11 @@ export function classifyInstallTarget(
 
 /** Inspect the install target so the renderer can warn before installing. */
 export function inspectInstallTarget(): InstallTargetInfo {
-  const repoExists = existsSync(HERMES_REPO);
-  const repoIsGitRepo = repoExists && existsSync(join(HERMES_REPO, ".git"));
+  const repoExists = existsSync(GETRIDA_REPO);
+  const repoIsGitRepo = repoExists && existsSync(join(GETRIDA_REPO, ".git"));
   return {
-    hermesHome: HERMES_HOME,
-    repoPath: HERMES_REPO,
+    hermesHome: GETRIDA_HOME,
+    repoPath: GETRIDA_REPO,
     state: classifyInstallTarget(repoExists, repoIsGitRepo),
   };
 }
@@ -475,7 +472,7 @@ export function checkInstallStatus(): InstallStatus {
   // `python --version` check used to run here adds 1–10s of cold-start
   // latency, so it now lives in `verifyInstall()` and is invoked lazily
   // by the renderer after the main UI is mounted.
-  const installed = existsSync(HERMES_PYTHON) && existsSync(HERMES_SCRIPT);
+  const installed = existsSync(GETRIDA_PYTHON) && existsSync(HERMES_SCRIPT);
   const envFile = activeEnvFile(activeProfile);
   const authFile = activeAuthFile(activeProfile);
   const configured = existsSync(envFile) || existsSync(authFile);
@@ -525,15 +522,15 @@ export async function verifyInstall(): Promise<boolean> {
   }
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       hermesCliArgs(["--version"]),
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
         },
         timeout: 15000,
         ...HIDDEN_SUBPROCESS_OPTIONS,
@@ -577,15 +574,15 @@ export async function getHermesVersion(): Promise<string | null> {
   _versionFetching = true;
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       hermesCliArgs(["--version"]),
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
         },
         timeout: 15000,
         ...HIDDEN_SUBPROCESS_OPTIONS,
@@ -612,13 +609,13 @@ export function runHermesDoctor(): string {
     return "Hermes is not installed.";
   }
   try {
-    const output = execFileSync(HERMES_PYTHON, hermesCliArgs(["doctor"]), {
-      cwd: HERMES_REPO,
+    const output = execFileSync(GETRIDA_PYTHON, hermesCliArgs(["doctor"]), {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
       },
       stdio: ["ignore", "pipe", "pipe"],
       timeout: 30000,
@@ -671,7 +668,7 @@ export function checkOpenClawExists(home: string = homedir()): {
 export async function runClawMigrate(
   onProgress: (progress: InstallProgress) => void,
 ): Promise<void> {
-  if (!existsSync(HERMES_PYTHON) || !existsSync(HERMES_SCRIPT)) {
+  if (!existsSync(GETRIDA_PYTHON) || !existsSync(HERMES_SCRIPT)) {
     throw new Error("Hermes is not installed.");
   }
 
@@ -697,13 +694,13 @@ export async function runClawMigrate(
   return new Promise((resolve, reject) => {
     const args = hermesCliArgs(["claw", "migrate", "--preset", "full"]);
 
-    const proc = spawn(HERMES_PYTHON, args, {
-      cwd: HERMES_REPO,
+    const proc = spawn(GETRIDA_PYTHON, args, {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
         TERM: "dumb",
       },
       stdio: ["ignore", "pipe", "pipe"],
@@ -736,7 +733,7 @@ export async function runClawMigrate(
 export async function runHermesUpdate(
   onProgress: (progress: InstallProgress) => void,
 ): Promise<void> {
-  if (!existsSync(HERMES_PYTHON) || !existsSync(HERMES_SCRIPT)) {
+  if (!existsSync(GETRIDA_PYTHON) || !existsSync(HERMES_SCRIPT)) {
     throw new Error("Hermes is not installed. Please install it first.");
   }
 
@@ -755,13 +752,13 @@ export async function runHermesUpdate(
   emit("Running hermes update...\n");
 
   return new Promise((resolve, reject) => {
-    const proc = spawn(HERMES_PYTHON, hermesCliArgs(["update"]), {
-      cwd: HERMES_REPO,
+    const proc = spawn(GETRIDA_PYTHON, hermesCliArgs(["update"]), {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
         TERM: "dumb",
       },
       stdio: ["ignore", "pipe", "pipe"],
@@ -962,7 +959,7 @@ export async function runInstall(
           // The install script can exit non-zero due to benign issues
           // (e.g. git stash pop failure on already-clean repo).
           // If Hermes is actually installed and working, treat as success.
-          if (existsSync(HERMES_PYTHON) && existsSync(HERMES_SCRIPT)) {
+          if (existsSync(GETRIDA_PYTHON) && existsSync(HERMES_SCRIPT)) {
             emit(
               "\nInstall script exited with warnings, but Hermes is installed successfully.\n",
             );
@@ -1014,11 +1011,11 @@ function resolvePowerShellExe(): string {
 async function runInstallWindows(emit: (t: string) => void): Promise<void> {
   // We can't `irm | iex` and pass parameters, and we want to override the
   // upstream defaults (which install to %LOCALAPPDATA%\hermes) so the
-  // desktop app's HERMES_HOME == ~\.hermes convention keeps working.
+  // desktop app's GETRIDA_HOME == ~\.hermes convention keeps working.
   // Strategy: write a small wrapper .ps1 to %TEMP%, run it with -File.
   const home = homedir();
-  const hermesHome = HERMES_HOME;
-  const installDir = HERMES_REPO;
+  const hermesHome = GETRIDA_HOME;
+  const installDir = GETRIDA_REPO;
 
   const wrapperPath = join(
     tmpdir(),
@@ -1051,9 +1048,9 @@ async function runInstallWindows(emit: (t: string) => void): Promise<void> {
     "} finally {",
     "  if ($env:HERMES_DESKTOP_SANDBOX -eq '1') {",
     "    $sandboxVenv = Join-Path $installDir 'venv\\Scripts'",
-    "    $userHermesHome = [Environment]::GetEnvironmentVariable('HERMES_HOME', 'User')",
+    "    $userHermesHome = [Environment]::GetEnvironmentVariable('GETRIDA_HOME', 'User')",
     "    if ($userHermesHome -and ($userHermesHome.TrimEnd('\\') -ieq $hermesHome.TrimEnd('\\'))) {",
-    "      [Environment]::SetEnvironmentVariable('HERMES_HOME', $null, 'User')",
+    "      [Environment]::SetEnvironmentVariable('GETRIDA_HOME', $null, 'User')",
     "    }",
     "    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')",
     "    if ($userPath) {",
@@ -1094,7 +1091,7 @@ async function runInstallWindows(emit: (t: string) => void): Promise<void> {
         env: {
           ...process.env,
           PATH: basePath,
-          HERMES_HOME: hermesHome,
+          GETRIDA_HOME: hermesHome,
           // Hint that we're not interactive so install.ps1 doesn't `pause`
           // (the .cmd wrapper does on failure, but -File on .ps1 won't).
           NO_COLOR: "1",
@@ -1124,7 +1121,7 @@ async function runInstallWindows(emit: (t: string) => void): Promise<void> {
         return;
       }
       // Same tolerance as the bash path: if the binary tree exists, count it.
-      if (existsSync(HERMES_PYTHON) && existsSync(HERMES_SCRIPT)) {
+      if (existsSync(GETRIDA_PYTHON) && existsSync(HERMES_SCRIPT)) {
         emit(
           "\nInstall script exited with warnings, but Hermes is installed successfully.\n",
         );
@@ -1161,7 +1158,7 @@ async function runInstallWindows(emit: (t: string) => void): Promise<void> {
 export async function runHermesBackup(
   profile?: string,
 ): Promise<{ success: boolean; path?: string; error?: string }> {
-  if (!existsSync(HERMES_PYTHON) || !existsSync(HERMES_SCRIPT)) {
+  if (!existsSync(GETRIDA_PYTHON) || !existsSync(HERMES_SCRIPT)) {
     return { success: false, error: "Hermes is not installed." };
   }
   const args = hermesCliArgs();
@@ -1170,15 +1167,15 @@ export async function runHermesBackup(
 
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       args,
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
           TERM: "dumb",
         },
         timeout: 120000,
@@ -1215,7 +1212,7 @@ export async function runHermesImport(
     return { success: false, error: archive.error };
   }
 
-  if (!existsSync(HERMES_PYTHON) || !existsSync(HERMES_SCRIPT)) {
+  if (!existsSync(GETRIDA_PYTHON) || !existsSync(HERMES_SCRIPT)) {
     return { success: false, error: "Hermes is not installed." };
   }
   const args = hermesCliArgs();
@@ -1224,15 +1221,15 @@ export async function runHermesImport(
 
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       args,
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
           TERM: "dumb",
         },
         timeout: 120000,
@@ -1280,20 +1277,20 @@ export function validateImportArchivePath(
 // ────────────────────────────────────────────────────
 
 export function runHermesDump(): Promise<string> {
-  if (!existsSync(HERMES_PYTHON) || !existsSync(HERMES_SCRIPT)) {
+  if (!existsSync(GETRIDA_PYTHON) || !existsSync(HERMES_SCRIPT)) {
     return Promise.resolve("Hermes is not installed.");
   }
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       hermesCliArgs(["dump"]),
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
           TERM: "dumb",
         },
         timeout: 30000,
@@ -1329,7 +1326,7 @@ export interface MemoryProviderInfo {
 export function discoverMemoryProviders(
   profile?: string,
 ): MemoryProviderInfo[] {
-  const pluginsDir = join(HERMES_REPO, "plugins", "memory");
+  const pluginsDir = join(GETRIDA_REPO, "plugins", "memory");
   if (!existsSync(pluginsDir)) return [];
 
   const activeProvider = getActiveMemoryProvider(profile);
@@ -1495,7 +1492,7 @@ export function readLogs(
   logFile = "agent.log",
   lines = 200,
 ): { content: string; path: string } {
-  const logsDir = join(HERMES_HOME, "logs");
+  const logsDir = join(GETRIDA_HOME, "logs");
   // Sanitize: only allow known log file names
   const allowed = ["agent.log", "errors.log", "gateway.log"];
   const file = allowed.includes(logFile) ? logFile : "agent.log";

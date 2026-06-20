@@ -17,9 +17,9 @@ import https from "https";
 import net from "net";
 import WebSocket from "ws";
 import {
-  HERMES_HOME,
-  HERMES_REPO,
-  HERMES_PYTHON,
+  GETRIDA_HOME,
+  GETRIDA_REPO,
+  GETRIDA_PYTHON,
   hermesCliArgs,
   getEnhancedPath,
 } from "./installer";
@@ -539,8 +539,8 @@ class TuiGatewayClient {
     if (!existsSync(tuiGatewayPython())) {
       throw new Error(`Python interpreter not found at ${tuiGatewayPython()}`);
     }
-    if (!existsSync(HERMES_REPO)) {
-      throw new Error(`hermes-agent repo not found at ${HERMES_REPO}`);
+    if (!existsSync(GETRIDA_REPO)) {
+      throw new Error(`hermes-agent repo not found at ${GETRIDA_REPO}`);
     }
 
     this.port = await pickDashboardPort();
@@ -565,7 +565,7 @@ class TuiGatewayClient {
       String(this.port),
     ]);
     const proc = spawn(tuiGatewayPython(), args, {
-      cwd: HERMES_REPO,
+      cwd: GETRIDA_REPO,
       env: dashboardEnv,
       stdio: ["ignore", "pipe", "pipe"],
       ...HIDDEN_SUBPROCESS_OPTIONS,
@@ -745,10 +745,10 @@ function wsDataToString(
 const tuiGatewayClients = new Map<string, TuiGatewayClient>();
 
 function tuiGatewayPython(): string {
-  if (process.platform === "win32" && /pythonw\.exe$/i.test(HERMES_PYTHON)) {
-    return HERMES_PYTHON.replace(/pythonw\.exe$/i, "python.exe");
+  if (process.platform === "win32" && /pythonw\.exe$/i.test(GETRIDA_PYTHON)) {
+    return GETRIDA_PYTHON.replace(/pythonw\.exe$/i, "python.exe");
   }
-  return HERMES_PYTHON;
+  return GETRIDA_PYTHON;
 }
 
 export function tuiGatewayEnv(profile?: string): Record<string, string> {
@@ -758,14 +758,14 @@ export function tuiGatewayEnv(profile?: string): Record<string, string> {
     ...(process.env as Record<string, string>),
     PATH: getEnhancedPath(),
     HOME: homedir(),
-    HERMES_HOME: profileHome(resolved),
-    HERMES_PYTHON_SRC_ROOT: HERMES_REPO,
+    GETRIDA_HOME: profileHome(resolved),
+    GETRIDA_PYTHON_SRC_ROOT: GETRIDA_REPO,
     PYTHONUNBUFFERED: "1",
   };
   const existingPythonPath = env.PYTHONPATH?.trim();
   env.PYTHONPATH = existingPythonPath
-    ? `${HERMES_REPO}${envPathDelimiter}${existingPythonPath}`
-    : HERMES_REPO;
+    ? `${GETRIDA_REPO}${envPathDelimiter}${existingPythonPath}`
+    : GETRIDA_REPO;
   if (resolved) env.HERMES_PROFILE = resolved;
   for (const [key, value] of Object.entries(readEnv(profile))) {
     if (value) env[key] = value;
@@ -2125,7 +2125,7 @@ function sendMessageViaCli(
     ...(process.env as Record<string, string>),
     PATH: getEnhancedPath(),
     HOME: homedir(),
-    HERMES_HOME: HERMES_HOME,
+    GETRIDA_HOME: GETRIDA_HOME,
     PYTHONUNBUFFERED: "1",
   };
 
@@ -2287,8 +2287,8 @@ function sendMessageViaCli(
     delete env.OPENROUTER_BASE_URL;
   }
 
-  const proc = spawn(HERMES_PYTHON, args, {
-    cwd: HERMES_REPO,
+  const proc = spawn(GETRIDA_PYTHON, args, {
+    cwd: GETRIDA_REPO,
     env,
     stdio: ["ignore", "pipe", "pipe"],
     ...HIDDEN_SUBPROCESS_OPTIONS,
@@ -2776,15 +2776,15 @@ function invalidateApiCacheFor(profile?: string): void {
 }
 
 function getGatewaySpawnError(): string | null {
-  if (!existsSync(HERMES_PYTHON)) {
+  if (!existsSync(GETRIDA_PYTHON)) {
     return (
-      `Cannot start the gateway because the Hermes Python interpreter was not found at ${HERMES_PYTHON}. ` +
+      `Cannot start the gateway because the Hermes Python interpreter was not found at ${GETRIDA_PYTHON}. ` +
       "Install or repair Hermes Agent, then try again."
     );
   }
-  if (!existsSync(HERMES_REPO)) {
+  if (!existsSync(GETRIDA_REPO)) {
     return (
-      `Cannot start the gateway because the hermes-agent repository was not found at ${HERMES_REPO}. ` +
+      `Cannot start the gateway because the hermes-agent repository was not found at ${GETRIDA_REPO}. ` +
       "Install or repair Hermes Agent, then try again."
     );
   }
@@ -2820,7 +2820,7 @@ export function buildGatewayEnv(profile?: string): Record<string, string> {
     ...(process.env as Record<string, string>),
     PATH: getEnhancedPath(),
     HOME: homedir(),
-    HERMES_HOME: HERMES_HOME,
+    GETRIDA_HOME: GETRIDA_HOME,
     API_SERVER_ENABLED: "true",
     // Bind to this profile's port. config.yaml's api_server.port wins when
     // present (getProfilePort keeps it collision-free); this env value covers
@@ -2894,7 +2894,7 @@ export function startGatewayDetailed(profile?: string): GatewayStartResult {
   // Defensive: the local gateway is never the right thing to spawn in
   // remote/SSH mode — the user is pointing at an off-machine server.
   // Callers should already gate, but several IPC handlers historically
-  // forgot to (issue #266), and reaching `spawn(HERMES_PYTHON, …)` when
+  // forgot to (issue #266), and reaching `spawn(GETRIDA_PYTHON, …)` when
   // there's no local hermes-agent install produces an uncaught ENOENT
   // that pops a generic error dialog.  Refuse cleanly here.
   if (isRemoteMode()) {
@@ -2943,13 +2943,13 @@ export function startGatewayDetailed(profile?: string): GatewayStartResult {
 
   // Target the specific profile via `--profile <name>` (placed before the
   // subcommand, as the CLI requires). The flag makes the CLI repoint
-  // HERMES_HOME at the profile's dir internally; the shared repo/venv stay
+  // GETRIDA_HOME at the profile's dir internally; the shared repo/venv stay
   // put. The default profile takes no flag.
   const cliArgs = gatewayCliCommandArgs(profile, ["gateway"]);
   let proc: ChildProcess;
   try {
-    proc = spawn(HERMES_PYTHON, hermesCliArgs(cliArgs), {
-      cwd: HERMES_REPO,
+    proc = spawn(GETRIDA_PYTHON, hermesCliArgs(cliArgs), {
+      cwd: GETRIDA_REPO,
       env: gatewayEnv,
       stdio: ["ignore", "ignore", stderrFd >= 0 ? stderrFd : "ignore"],
       detached: true,
@@ -3444,10 +3444,10 @@ async function restartGatewayViaCliOnce(
       try {
         stderrFd = openSync(logPath, "a");
         proc = spawn(
-          HERMES_PYTHON,
+          GETRIDA_PYTHON,
           hermesCliArgs(gatewayCliCommandArgs(profile, ["gateway", "restart"])),
           {
-            cwd: HERMES_REPO,
+            cwd: GETRIDA_REPO,
             env: buildGatewayEnv(profile),
             stdio: ["ignore", "ignore", stderrFd >= 0 ? stderrFd : "ignore"],
             detached: true,

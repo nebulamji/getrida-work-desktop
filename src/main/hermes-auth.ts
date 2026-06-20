@@ -1,9 +1,9 @@
 import { spawn, type ChildProcess } from "child_process";
 import { homedir } from "os";
 import {
-  HERMES_PYTHON,
-  HERMES_REPO,
-  HERMES_HOME,
+  GETRIDA_PYTHON,
+  GETRIDA_REPO,
+  GETRIDA_HOME,
   hermesCliArgs,
   getEnhancedPath,
 } from "./installer";
@@ -113,13 +113,13 @@ export function runHermesAuthLogin(
 
     let proc: ChildProcess;
     try {
-      proc = spawn(HERMES_PYTHON, hermesCliArgs(subArgs), {
-        cwd: HERMES_REPO,
+      proc = spawn(GETRIDA_PYTHON, hermesCliArgs(subArgs), {
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
           PYTHONUNBUFFERED: "1",
           TERM: "dumb",
         },

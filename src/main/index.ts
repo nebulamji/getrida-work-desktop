@@ -687,7 +687,7 @@ function setupIPC(): void {
   );
   ipcMain.handle("adopt-hermes-home", (_event, dir: string) => {
     if (!validateHermesHome(dir)) return false;
-    // Persist the choice only. HERMES_HOME is resolved once at module
+    // Persist the choice only. GETRIDA_HOME is resolved once at module
     // load, so the override takes effect on the next launch — the renderer
     // asks the user to restart. (An app-driven relaunch is unreliable
     // under the dev server, which is torn down with the process.)
@@ -2660,15 +2660,15 @@ function buildMenu(): void {
       label: "Help",
       submenu: [
         {
-          label: "Hermes Agent on GitHub",
+          label: "GetRida Work Desktop on GitHub",
           click: (): void => {
-            openExternalUrl("https://github.com/NousResearch/hermes-agent/");
+            openExternalUrl("https://github.com/nebulamji/getrida-work-desktop/");
           },
         },
         {
           label: "Report an Issue",
           click: (): void => {
-            openExternalUrl("https://github.com/fathah/hermes-desktop/issues");
+            openExternalUrl("https://github.com/nebulamji/getrida-work-desktop/issues");
           },
         },
       ],
@@ -2782,7 +2782,7 @@ if (process.env.ENABLE_CDP === "1") {
 
 app.whenReady().then(() => {
   app.setName(APP_NAME);
-  electronApp.setAppUserModelId("com.nousresearch.hermes");
+  electronApp.setAppUserModelId("work.getrida.desktop");
   cleanupTempMediaFiles();
 
   // Allow microphone access for the app's own renderer (voice input). Without

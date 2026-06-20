@@ -1,7 +1,7 @@
 export default {
   title: "Configurações",
   sections: {
-    hermesAgent: "Hermes Agent",
+    hermesAgent: "GetRida Agent",
     appearance: "Aparência",
     privacy: "Privacidade",
     credentialPool: "Pool de Credenciais",

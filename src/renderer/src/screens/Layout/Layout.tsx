@@ -483,7 +483,7 @@ function Layout({
           <span
             className="sidebar-logo"
             role="img"
-            aria-label="Hermes"
+            aria-label="GetRida Work"
             style={{
               maskImage: `url(${hermeslogo})`,
               WebkitMaskImage: `url(${hermeslogo})`,

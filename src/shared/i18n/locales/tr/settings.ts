@@ -1,7 +1,7 @@
 export default {
   title: "Ayarlar",
   sections: {
-    hermesAgent: "Hermes Agent",
+    hermesAgent: "GetRida Agent",
     appearance: "Görünüm",
     privacy: "Gizlilik",
     credentialPool: "Kimlik Bilgisi Havuzu",
@@ -35,7 +35,7 @@ export default {
   },
   analytics: {
     label: "Anonim kullanım istatistikleri gönder",
-    hint: "Hermes One'ı iyileştirmeye yardımcı olmak için anonim, toplulaştırılmış kullanım verilerini projenin PostHog örneğine gönderir. İstediğiniz zaman kapatabilirsiniz.",
+    hint: "GetRida Work Desktop'ı iyileştirmeye yardımcı olmak için anonim, toplulaştırılmış kullanım verilerini projenin PostHog örneğine gönderir. İstediğiniz zaman kapatabilirsiniz.",
     disclosure: {
       uuid: "Yalnızca bu cihazda saklanan rastgele bir kurulum tanımlayıcısı (ad, e-posta veya hesap bilgisi yok).",
       platform: "İşletim sisteminiz, Electron sürümü ve Node.js sürümü.",

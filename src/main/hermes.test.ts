@@ -5,9 +5,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // test (config's readEnv / secrets' providerListSafe). Everything else
 // (run-stream, url-key-map, …) is pure and loads for real.
 vi.mock("./installer", () => ({
-  HERMES_HOME: "/tmp/hermes-test-home",
-  HERMES_REPO: "/tmp/hermes-test-repo",
-  HERMES_PYTHON: "python3",
+  GETRIDA_HOME: "/tmp/hermes-test-home",
+  GETRIDA_REPO: "/tmp/hermes-test-repo",
+  GETRIDA_PYTHON: "python3",
   hermesCliArgs: vi.fn(() => []),
   getEnhancedPath: vi.fn(() => ""),
 }));

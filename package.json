@@ -1,10 +1,10 @@
 {
-  "name": "hermes-desktop",
+  "name": "getrida-work-desktop",
   "version": "0.6.2",
-  "description": "Hermes Agent Desktop — self-improving AI assistant",
+  "description": "GetRida Work Desktop — AI Growth Operator command center",
   "main": "./out/main/index.js",
-  "author": "fathah",
-  "homepage": "https://github.com/fathah/hermes-desktop",
+  "author": "nebulamji",
+  "homepage": "https://getrida.work",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -20,7 +20,7 @@
     "dev": "electron-vite dev",
     "dev:sandbox": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/hermes-sandbox.ps1 dev",
     "sandbox:sync-config": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/hermes-sandbox.ps1 sync-config",
-    "dev:fresh": "HERMES_HOME=$(mktemp -d -t hermes-fresh) electron-vite dev",
+    "dev:fresh": "GETRIDA_HOME=$(mktemp -d -t getrida-fresh) electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",

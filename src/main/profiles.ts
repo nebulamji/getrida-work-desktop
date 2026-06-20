@@ -4,8 +4,8 @@ import { homedir } from "os";
 import { promises as fs } from "fs";
 import { existsSync } from "fs";
 import {
-  HERMES_HOME,
-  HERMES_PYTHON,
+  GETRIDA_HOME,
+  GETRIDA_PYTHON,
   hermesCliArgs,
   getEnhancedPath,
 } from "./installer";
@@ -19,7 +19,7 @@ import {
 import { HIDDEN_SUBPROCESS_OPTIONS } from "./process-options";
 import { readProfileMeta, defaultColorForName } from "./profile-meta";
 
-const PROFILES_DIR = join(HERMES_HOME, "profiles");
+const PROFILES_DIR = join(GETRIDA_HOME, "profiles");
 
 function commandErrorMessage(err: unknown): string {
   const e = err as {
@@ -130,7 +130,7 @@ export async function listProfiles(): Promise<ProfileInfo[]> {
   const activeName = await getActiveProfileName();
   const profiles: ProfileInfo[] = [];
 
-  // Default profile is HERMES_HOME itself
+  // Default profile is GETRIDA_HOME itself
   const [
     defaultConfig,
     defaultHasEnv,
@@ -139,17 +139,17 @@ export async function listProfiles(): Promise<ProfileInfo[]> {
     defaultGw,
     defaultMeta,
   ] = await Promise.all([
-    readProfileConfig(HERMES_HOME),
-    fileExists(join(HERMES_HOME, ".env")),
-    fileExists(join(HERMES_HOME, "SOUL.md")),
-    countSkills(HERMES_HOME),
-    isGatewayRunning(HERMES_HOME),
+    readProfileConfig(GETRIDA_HOME),
+    fileExists(join(GETRIDA_HOME, ".env")),
+    fileExists(join(GETRIDA_HOME, "SOUL.md")),
+    countSkills(GETRIDA_HOME),
+    isGatewayRunning(GETRIDA_HOME),
     readProfileMeta("default"),
   ]);
 
   profiles.push({
     name: "default",
-    path: HERMES_HOME,
+    path: GETRIDA_HOME,
     isDefault: true,
     isActive: activeName === "default",
     model: defaultConfig.model,
@@ -232,13 +232,13 @@ export function createProfile(
     const args = clone
       ? ["profile", "create", name, "--clone"]
       : ["profile", "create", name];
-    execFileSync(HERMES_PYTHON, hermesCliArgs(args), {
-      cwd: join(HERMES_HOME, "hermes-agent"),
+    execFileSync(GETRIDA_PYTHON, hermesCliArgs(args), {
+      cwd: join(GETRIDA_HOME, "hermes-agent"),
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
       },
       stdio: "pipe",
       timeout: 30000,
@@ -262,15 +262,15 @@ export function deleteProfile(name: string): {
 
   try {
     execFileSync(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       hermesCliArgs(["profile", "delete", name, "--yes"]),
       {
-        cwd: join(HERMES_HOME, "hermes-agent"),
+        cwd: join(GETRIDA_HOME, "hermes-agent"),
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
         },
         stdio: "pipe",
         timeout: 30000,
@@ -289,13 +289,13 @@ export function setActiveProfile(name: string): void {
   }
 
   try {
-    execFileSync(HERMES_PYTHON, hermesCliArgs(["profile", "use", name]), {
-      cwd: join(HERMES_HOME, "hermes-agent"),
+    execFileSync(GETRIDA_PYTHON, hermesCliArgs(["profile", "use", name]), {
+      cwd: join(GETRIDA_HOME, "hermes-agent"),
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
       },
       stdio: "pipe",
       timeout: 10000,

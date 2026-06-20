@@ -9,17 +9,17 @@ import {
 import { join, win32 } from "path";
 import { homedir } from "os";
 import { createConnection } from "net";
-import { getEnhancedPath, HERMES_HOME } from "./installer";
+import { getEnhancedPath, GETRIDA_HOME } from "./installer";
 import { stripAnsi, safeWriteFile, getActiveProfileNameSync } from "./utils";
 import { getApiServerKey, getConnectionConfig, getModelConfig } from "./config";
 import http from "http";
 
-const HERMES_OFFICE_REPO = "https://github.com/fathah/hermes-office";
-const HERMES_OFFICE_DIR = join(HERMES_HOME, "hermes-office");
-const DEV_PID_FILE = join(HERMES_HOME, "claw3d-dev.pid");
-const ADAPTER_PID_FILE = join(HERMES_HOME, "claw3d-adapter.pid");
-const PORT_FILE = join(HERMES_HOME, "claw3d-port");
-const WS_URL_FILE = join(HERMES_HOME, "claw3d-ws-url");
+const HERMES_OFFICE_REPO = "https://github.com/nebulamji/getrida-work-desktop";
+const HERMES_OFFICE_DIR = join(GETRIDA_HOME, "hermes-office");
+const DEV_PID_FILE = join(GETRIDA_HOME, "claw3d-dev.pid");
+const ADAPTER_PID_FILE = join(GETRIDA_HOME, "claw3d-adapter.pid");
+const PORT_FILE = join(GETRIDA_HOME, "claw3d-port");
+const WS_URL_FILE = join(GETRIDA_HOME, "claw3d-ws-url");
 const DEFAULT_PORT = 3000;
 const OLD_DEFAULT_WS_URL = "ws://localhost:18789";
 const DEFAULT_ADAPTER_PORT = 18989;

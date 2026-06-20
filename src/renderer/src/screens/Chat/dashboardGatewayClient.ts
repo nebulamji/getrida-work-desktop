@@ -107,7 +107,7 @@ export class DashboardGatewayClient {
 
       const failOpen = (event: Event): void => {
         if (this.socket === socket) this.socket = null;
-        reject(new Error(`Could not connect to Hermes dashboard WebSocket`));
+        reject(new Error(`Could not connect to GetRida WebSocket`));
         this.options.onError?.(event);
       };
 
@@ -123,7 +123,7 @@ export class DashboardGatewayClient {
       socket.addEventListener("message", (event) => this.handleMessage(event));
       socket.addEventListener("close", (event) => {
         if (this.socket === socket) this.socket = null;
-        this.rejectPending("Hermes dashboard WebSocket closed");
+        this.rejectPending("GetRida WebSocket closed");
         this.options.onClose?.(event);
       });
     });
@@ -136,7 +136,7 @@ export class DashboardGatewayClient {
     const socket = this.socket;
     if (!socket || socket.readyState !== WebSocket.OPEN) {
       return Promise.reject(
-        new Error("Hermes dashboard WebSocket is not connected"),
+        new Error("GetRida WebSocket is not connected"),
       );
     }
 
@@ -160,7 +160,7 @@ export class DashboardGatewayClient {
   close(): void {
     const socket = this.socket;
     this.socket = null;
-    this.rejectPending("Hermes dashboard WebSocket closed");
+    this.rejectPending("GetRida WebSocket closed");
     if (
       socket &&
       (socket.readyState === WebSocket.CONNECTING ||
@@ -198,7 +198,7 @@ export class DashboardGatewayClient {
       const message =
         typeof response.error === "string"
           ? response.error
-          : response.error.message || "Hermes dashboard request failed";
+          : response.error.message || "GetRida request failed";
       pending.reject(new Error(message));
       return;
     }

@@ -1,7 +1,7 @@
 export default {
   title: "Settings",
   sections: {
-    hermesAgent: "Hermes Agent",
+    hermesAgent: "GetRida Agent",
     appearance: "Appearance",
     privacy: "Privacy",
     credentialPool: "Credential Pool",
@@ -35,7 +35,7 @@ export default {
   },
   analytics: {
     label: "Send anonymous usage analytics",
-    hint: "Helps improve Hermes One by sending anonymous, aggregated usage data to the project's PostHog instance. You can turn this off at any time.",
+    hint: "Helps improve GetRida Work Desktop by sending anonymous, aggregated usage data to the project's PostHog instance. You can turn this off at any time.",
     disclosure: {
       uuid: "A random per-install identifier stored only on this device (no name, email, or account info).",
       platform: "Your operating system, Electron version, and Node.js version.",
@@ -103,7 +103,7 @@ export default {
     "Found OpenClaw at <code>{{path}}</code>. You can migrate your configuration, API keys, sessions, and skills to Hermes.",
   migrationDismiss: "Don't show again",
   migrating: "Migrating...",
-  migrateToHermes: "Migrate to Hermes",
+  migrateToHermes: "Migrate to GetRida",
   skip: "Skip",
   appearanceHint: "Choose your preferred interface appearance",
   apiKeyPlaceholder: "API Key",

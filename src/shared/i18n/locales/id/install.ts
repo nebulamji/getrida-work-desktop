@@ -3,7 +3,7 @@ export default {
   startingInstall: "Memulai instalasi",
   installationComplete: "Instalasi Selesai",
   installationFailed: "Instalasi Gagal",
-  installingHermes: "Menginstal Hermes Agent",
+  installingHermes: "Menginstal GetRida Agent",
   installationFailedHint:
     "Instalasi gagal. Coba lagi atau instal melalui terminal.",
   retryInstallation: "Ulangi Instalasi",
@@ -25,7 +25,7 @@ export default {
   confirmInstallBtn: "Pasang Hermes",
   useExistingBtn: "Gunakan pemasangan yang sudah ada",
   useExistingHint:
-    "Pilih folder yang berisi pemasangan Hermes Anda yang sudah ada (folder yang memuat folder hermes-agent).",
+    "Pilih folder yang berisi pemasangan Hermes Anda yang sudah ada (folder yang memuat folder getrida-agent).",
   useExistingInvalid:
     "Tidak ada pemasangan Hermes yang dapat digunakan di folder itu.",
   useExistingDone:

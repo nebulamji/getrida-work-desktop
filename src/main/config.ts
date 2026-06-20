@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { randomBytes } from "crypto";
 import { join } from "path";
-import { HERMES_HOME, expectedEnvKeyForModel } from "./installer";
+import { GETRIDA_HOME, expectedEnvKeyForModel } from "./installer";
 import {
   escapeRegex,
   getActiveProfileNameSync,
@@ -65,9 +65,9 @@ export interface PublicConnectionConfig {
 }
 
 // Lazy getter — avoids circular dependency with installer.ts
-// (HERMES_HOME may not be assigned yet when this module first loads)
+// (GETRIDA_HOME may not be assigned yet when this module first loads)
 function desktopConfigFile(): string {
-  return join(HERMES_HOME, "desktop.json");
+  return join(GETRIDA_HOME, "desktop.json");
 }
 
 export function normalizeRemoteChatTransport(
@@ -87,8 +87,8 @@ export function readDesktopConfig(): Record<string, unknown> {
 }
 
 export function writeDesktopConfig(data: Record<string, unknown>): void {
-  if (!existsSync(HERMES_HOME)) {
-    mkdirSync(HERMES_HOME, { recursive: true });
+  if (!existsSync(GETRIDA_HOME)) {
+    mkdirSync(GETRIDA_HOME, { recursive: true });
   }
   writeFileSync(desktopConfigFile(), JSON.stringify(data, null, 2), "utf-8");
 }
@@ -947,7 +947,7 @@ export function setModelConfig(
   const { configFile } = profilePaths(profile);
 
   // Bootstrap an empty config.yaml when it's missing — previously this
-  // function early-returned, so users on a custom HERMES_HOME where the
+  // function early-returned, so users on a custom GETRIDA_HOME where the
   // file hadn't been created (issue #228) had their model selection
   // silently dropped: the desktop appeared to save it but config.yaml
   // never got written, and the Python gateway saw an empty model and
@@ -1372,7 +1372,7 @@ const CONFIG_FIX_LOG_MAX_LINES = 1000;
 
 export function appendConfigFixLog(entry: ConfigFixLogEntry): void {
   try {
-    const logDir = join(HERMES_HOME, "logs");
+    const logDir = join(GETRIDA_HOME, "logs");
     if (!existsSync(logDir)) mkdirSync(logDir, { recursive: true });
     const logFile = join(logDir, "config-fixes.log");
     let existing = "";

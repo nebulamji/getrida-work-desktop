@@ -593,7 +593,7 @@ function logDashboardEvent(
   status: "accepted" | "dropped",
   runtimeSessionId: string | null,
 ): void {
-  if (import.meta.env.VITE_HERMES_DESKTOP_DASHBOARD_EVENT_LOG !== "1") return;
+  if (import.meta.env.VITE_GETRIDA_DESKTOP_DASHBOARD_EVENT_LOG !== "1") return;
   const payload = asRecord(event.payload);
   const summary: DashboardEventSummary = {
     timestamp: new Date().toISOString(),
@@ -611,7 +611,7 @@ function logDashboardEvent(
   const events = window.__HERMES_DASHBOARD_EVENTS__ ?? [];
   events.push(summary);
   window.__HERMES_DASHBOARD_EVENTS__ = events.slice(-200);
-  console.info("[Hermes dashboard event]", summary);
+  console.info("[GetRida event]", summary);
 }
 
 function usageFromPayload(payload: unknown): Partial<UsageState> | null {
@@ -647,7 +647,7 @@ export function completionFailed(payload: unknown): boolean {
 function completionErrorMessage(payload: unknown): string {
   const row = asRecord(payload);
   const raw = String(row.error || row.text || row.rendered || "").trim();
-  return raw.replace(/^error\s*:\s*/i, "") || "Hermes reported an error";
+  return raw.replace(/^error\s*:\s*/i, "") || "GetRida reported an error";
 }
 
 function userContentById(
@@ -1002,7 +1002,7 @@ export function useDashboardChatTransport({
       // Already known unavailable on this remote/SSH connection — fail fast so the
       // caller falls back to legacy without re-running the slow status+probe.
       if (dashboardUnavailableRef.current) {
-        throw new Error("Hermes dashboard transport is unavailable");
+        throw new Error("GetRida transport is unavailable");
       }
       if (connectingRef.current) return connectingRef.current;
 
@@ -1010,7 +1010,7 @@ export function useDashboardChatTransport({
       const pending = (async () => {
         const status = await window.hermesAPI.startDashboard(profile);
         if (clientGenerationRef.current !== generation) {
-          throw new Error("Hermes dashboard connection was superseded");
+          throw new Error("GetRida connection was superseded");
         }
         if (!status.running || !status.connection?.wsUrl) {
           // Sticky-fallback + notify only when we're actually going to fall back
@@ -1025,11 +1025,11 @@ export function useDashboardChatTransport({
           ) {
             dashboardUnavailableRef.current = true;
             onDashboardUnavailable?.(
-              status.error || "Hermes dashboard transport is unavailable",
+              status.error || "GetRida transport is unavailable",
             );
           }
           throw new Error(
-            status.error || "Hermes dashboard transport is unavailable",
+            status.error || "GetRida transport is unavailable",
           );
         }
         const client: DashboardGatewayClient = new DashboardGatewayClient({
@@ -1043,7 +1043,7 @@ export function useDashboardChatTransport({
         await client.connect(status.connection.wsUrl);
         if (clientGenerationRef.current !== generation) {
           client.close();
-          throw new Error("Hermes dashboard connection was superseded");
+          throw new Error("GetRida connection was superseded");
         }
         clientRef.current = client;
         return client;
@@ -1403,7 +1403,7 @@ export function useDashboardChatTransport({
         if (!syncedAttachments.handled) {
           if (fallbackOnUnavailable) return false;
           return failActiveTurn(
-            "Hermes dashboard could not attach the selected file. Use Auto or Legacy to fall back to the legacy attachment path.",
+            "GetRida could not attach the selected file. Use Auto or Legacy to fall back to the legacy attachment path.",
           );
         }
         const submitText = dashboardPromptTextWithAttachmentRefs(

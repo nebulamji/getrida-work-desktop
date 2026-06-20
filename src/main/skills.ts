@@ -10,9 +10,9 @@ import {
 import { isAbsolute, join, relative, resolve } from "path";
 import { homedir } from "os";
 import {
-  HERMES_HOME,
-  HERMES_PYTHON,
-  HERMES_REPO,
+  GETRIDA_HOME,
+  GETRIDA_PYTHON,
+  GETRIDA_REPO,
   hermesCliArgs,
   getEnhancedPath,
 } from "./installer";
@@ -138,7 +138,7 @@ function pathIsInside(parent: string, child: string): boolean {
 }
 
 function isProfileSkillFile(skillFile: string): boolean {
-  const profilesRoot = realOrResolved(join(HERMES_HOME, "profiles"));
+  const profilesRoot = realOrResolved(join(GETRIDA_HOME, "profiles"));
   if (!pathIsInside(profilesRoot, skillFile)) return false;
 
   const parts = relative(profilesRoot, skillFile).split(/[\\/]+/);
@@ -151,8 +151,8 @@ function isProfileSkillFile(skillFile: string): boolean {
 
 function isAllowedSkillFile(skillFile: string): boolean {
   const allowedRoots = [
-    join(HERMES_HOME, "skills"),
-    join(HERMES_REPO, "skills"),
+    join(GETRIDA_HOME, "skills"),
+    join(GETRIDA_REPO, "skills"),
   ].map(realOrResolved);
 
   return (
@@ -185,15 +185,15 @@ export function getSkillContent(skillPath: string): string {
 export function searchSkills(query: string): SkillSearchResult[] {
   try {
     const output = execFileSync(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       hermesCliArgs(["skills", "browse", "--query", query, "--json"]),
       {
-        cwd: HERMES_REPO,
+        cwd: GETRIDA_REPO,
         env: {
           ...process.env,
           PATH: getEnhancedPath(),
           HOME: homedir(),
-          HERMES_HOME,
+          GETRIDA_HOME,
         },
         stdio: ["ignore", "pipe", "pipe"],
         timeout: 30000,
@@ -231,7 +231,7 @@ export function searchSkills(query: string): SkillSearchResult[] {
  * List bundled skills from the hermes-agent repo.
  */
 export function listBundledSkills(): SkillSearchResult[] {
-  const bundledDir = join(HERMES_REPO, "skills");
+  const bundledDir = join(GETRIDA_REPO, "skills");
   if (!existsSync(bundledDir)) return [];
 
   const skills: SkillSearchResult[] = [];
@@ -351,13 +351,13 @@ export function installSkill(
       args.splice(process.platform === "win32" ? 2 : 1, 0, "-p", profile);
     }
 
-    const stdout = execFileSync(HERMES_PYTHON, args, {
-      cwd: HERMES_REPO,
+    const stdout = execFileSync(GETRIDA_PYTHON, args, {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
       },
       stdio: "pipe",
       timeout: 60000,
@@ -386,13 +386,13 @@ export function uninstallSkill(name: string, profile?: string): SkillCliResult {
       args.splice(process.platform === "win32" ? 2 : 1, 0, "-p", profile);
     }
 
-    const stdout = execFileSync(HERMES_PYTHON, args, {
-      cwd: HERMES_REPO,
+    const stdout = execFileSync(GETRIDA_PYTHON, args, {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
       },
       stdio: "pipe",
       timeout: 30000,

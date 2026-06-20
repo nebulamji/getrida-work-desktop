@@ -21,9 +21,9 @@ import { readEnv, getModelContextLengthOverride } from "./config";
 import { profileHome } from "./utils";
 import {
   expectedEnvKeyForModel,
-  HERMES_PYTHON,
-  HERMES_REPO,
-  HERMES_HOME,
+  GETRIDA_PYTHON,
+  GETRIDA_REPO,
+  GETRIDA_HOME,
   getEnhancedPath,
 } from "./installer";
 // PROVIDER_BASE_URLS lives in its own module so `config.ts` can use the
@@ -103,11 +103,11 @@ const PROVIDER_MODELS_SNIPPET =
 function runProviderModelIdsPython(provider: string): Promise<string[] | null> {
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       ["-c", PROVIDER_MODELS_SNIPPET, provider],
       {
-        cwd: HERMES_REPO,
-        env: { ...process.env, PATH: getEnhancedPath(), HERMES_HOME },
+        cwd: GETRIDA_REPO,
+        env: { ...process.env, PATH: getEnhancedPath(), GETRIDA_HOME },
         timeout: 20_000,
         windowsHide: true,
       },

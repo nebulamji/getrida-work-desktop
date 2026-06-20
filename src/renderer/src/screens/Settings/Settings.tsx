@@ -1000,7 +1000,7 @@ function Settings({ profile }: { profile?: string }): React.JSX.Element {
                 ))}
               </div>
               <div className="settings-field-hint">
-                Auto tries the Hermes dashboard WebSocket first, then falls back
+                Auto tries the GetRida WebSocket first, then falls back
                 to the legacy remote API. Dashboard requires the remote Hermes
                 dashboard URL and a valid dashboard session token.
               </div>
@@ -1128,7 +1128,7 @@ function Settings({ profile }: { profile?: string }): React.JSX.Element {
                 ))}
               </div>
               <div className="settings-field-hint">
-                Auto tries the Hermes dashboard WebSocket through the SSH tunnel
+                Auto tries the GetRida WebSocket through the SSH tunnel
                 first, then falls back to legacy SSH chat. Dashboard forces the
                 upstream dashboard path; Legacy keeps the older SSH transport.
               </div>

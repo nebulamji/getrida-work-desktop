@@ -29,7 +29,7 @@ import {
   upsertBlockChild,
 } from "./config";
 import { safeWriteFile } from "./utils";
-import { HERMES_HOME } from "./installer";
+import { GETRIDA_HOME } from "./installer";
 import { expectedEnvKeyForModel } from "./installer";
 import { expectedEnvKeyForUrl, isLocalBaseUrl } from "../shared/url-key-map";
 import { findSiblingHermesHomes } from "./wsl-detection";
@@ -51,7 +51,7 @@ export type IssueCode =
   | "MODEL_KEY_MISSING"
   | "UI_RUNTIME_ENVKEY_MISMATCH"
   | "NON_ASCII_CREDENTIAL"
-  | "SIBLING_HERMES_HOME_DRIFT"
+  | "SIBLING_GETRIDA_HOME_DRIFT"
   | "LEGACY_TOOLSET_NAME";
 
 export interface ConfigHealthIssue {
@@ -136,7 +136,7 @@ export function autoFixIssue(
         return fixRuntimeEnvKeyMismatch(profile, context);
       case "NON_ASCII_CREDENTIAL":
         return fixNonAsciiCredential(profile, context);
-      case "SIBLING_HERMES_HOME_DRIFT":
+      case "SIBLING_GETRIDA_HOME_DRIFT":
         return fixSiblingHermesHomeDrift(profile, context);
       case "LEGACY_TOOLSET_NAME":
         return fixLegacyToolsetName(profile);
@@ -731,7 +731,7 @@ function checkSiblingHermesHomeDrift(profile?: string): ConfigHealthIssue[] {
       // ever needed, expose a second fixId.
       if (!winValue && wslValue) {
         issues.push({
-          code: "SIBLING_HERMES_HOME_DRIFT",
+          code: "SIBLING_GETRIDA_HOME_DRIFT",
           severity: "warning",
           message: `${label} is set on WSL (${sibling.distro}) but not on the Windows side that Hermes One reads.`,
           detail:
@@ -756,7 +756,7 @@ function checkSiblingHermesHomeDrift(profile?: string): ConfigHealthIssue[] {
         // broken). Surface as info, not auto-fixable from here
         // (we don't want to write to WSL silently).
         issues.push({
-          code: "SIBLING_HERMES_HOME_DRIFT",
+          code: "SIBLING_GETRIDA_HOME_DRIFT",
           severity: "info",
           message: `${label} is set on Windows but not on WSL (${sibling.distro}).`,
           detail:
@@ -777,7 +777,7 @@ function checkSiblingHermesHomeDrift(profile?: string): ConfigHealthIssue[] {
         // intentional (separate billing accounts, dev vs prod
         // keys). Surface as info, no auto-fix.
         issues.push({
-          code: "SIBLING_HERMES_HOME_DRIFT",
+          code: "SIBLING_GETRIDA_HOME_DRIFT",
           severity: "info",
           message: `${label} has different values on Windows and WSL (${sibling.distro}).`,
           detail:
@@ -861,7 +861,7 @@ function fixSiblingHermesHomeDrift(
     }
     appendConfigFixLog({
       ts: Date.now(),
-      issueCode: "SIBLING_HERMES_HOME_DRIFT",
+      issueCode: "SIBLING_GETRIDA_HOME_DRIFT",
       action: "autofix",
       from: `wsl:${wslHome}/${fieldDef.source === "env" ? ".env" : "config.yaml"}`,
       to:
@@ -1057,7 +1057,7 @@ export { checkLegacyToolsetName, fixLegacyToolsetName };
  * filesystem from the renderer.
  */
 export function configFixLogPath(): string {
-  return join(HERMES_HOME, "logs", "config-fixes.log");
+  return join(GETRIDA_HOME, "logs", "config-fixes.log");
 }
 
 /**

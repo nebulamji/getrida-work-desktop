@@ -1,12 +1,12 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { randomUUID } from "crypto";
-import { HERMES_HOME } from "./installer";
+import { GETRIDA_HOME } from "./installer";
 import { safeWriteFile, profilePaths } from "./utils";
 import { hostDerivedEnvKeyForUrl } from "./host-derived-env";
 import DEFAULT_MODELS from "./default-models";
 
-const MODELS_FILE = join(HERMES_HOME, "models.json");
+const MODELS_FILE = join(GETRIDA_HOME, "models.json");
 
 export interface SavedModel {
   id: string;

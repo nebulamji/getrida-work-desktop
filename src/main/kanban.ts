@@ -1,8 +1,8 @@
 import { execFile, ExecFileOptions } from "child_process";
 import { join } from "path";
 import {
-  HERMES_HOME,
-  HERMES_PYTHON,
+  GETRIDA_HOME,
+  GETRIDA_PYTHON,
   hermesCliArgs,
   getEnhancedPath,
 } from "./installer";
@@ -126,14 +126,14 @@ async function runKanban(
   cliArgs.push("kanban", ...args);
 
   const execOpts: ExecFileOptions = {
-    cwd: join(HERMES_HOME, "hermes-agent"),
+    cwd: join(GETRIDA_HOME, "hermes-agent"),
     timeout: opts.timeoutMs ?? KANBAN_TIMEOUT_MS,
     env: { ...process.env, PATH: getEnhancedPath() },
     maxBuffer: 16 * 1024 * 1024,
   };
 
   return new Promise((resolve) => {
-    execFile(HERMES_PYTHON, cliArgs, execOpts, (err, stdout, stderr) => {
+    execFile(GETRIDA_PYTHON, cliArgs, execOpts, (err, stdout, stderr) => {
       const out = (stdout || "").toString();
       if (err) {
         resolve({

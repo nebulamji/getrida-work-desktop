@@ -34,7 +34,7 @@ describe("messaging platform catalog", () => {
 
     for (const platform of MESSAGING_PLATFORM_CATALOG) {
       expect(platform.docs_url).toBe(
-        `https://hermes-agent.nousresearch.com/docs/user-guide/messaging/${
+        `https://getrida.work/docs/messaging/${
           expectedSlugs[platform.id]
         }/`,
       );

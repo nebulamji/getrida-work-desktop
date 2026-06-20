@@ -3,7 +3,7 @@ export default {
   startingInstall: "開始安裝",
   installationComplete: "安裝完成",
   installationFailed: "安裝失敗",
-  installingHermes: "正在安裝 Hermes Agent",
+  installingHermes: "正在安裝 GetRida Agent",
   installationFailedHint: "安裝失敗，請重試或改用終端機安裝。",
   retryInstallation: "重新安裝",
   copied: "已複製！",
@@ -22,7 +22,7 @@ export default {
   confirmInstallBtn: "安裝 Hermes",
   useExistingBtn: "使用現有安裝",
   useExistingHint:
-    "選擇包含你現有 Hermes 安裝的資料夾（即包含 hermes-agent 資料夾的那個）。",
+    "選擇包含你現有 Hermes 安裝的資料夾（即包含 getrida-agent 資料夾的那個）。",
   useExistingInvalid: "在該資料夾中未找到可用的 Hermes 安裝。",
   useExistingDone: "已設定現有安裝 — 結束並重新開啟 Hermes 以套用。",
   useExistingQuitBtn: "結束 Hermes",

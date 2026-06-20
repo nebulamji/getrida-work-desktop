@@ -10,9 +10,9 @@ import { getConnectionConfig, type ConnectionConfig } from "./config";
 import {
   getEnhancedPath,
   hermesCliArgs,
-  HERMES_HOME,
-  HERMES_PYTHON,
-  HERMES_REPO,
+  GETRIDA_HOME,
+  GETRIDA_PYTHON,
+  GETRIDA_REPO,
 } from "./installer";
 import { buildLocalDashboardCliArgs } from "./dashboard-launch";
 import {
@@ -158,11 +158,11 @@ function getManagedDashboard(profile?: string): ManagedDashboard | undefined {
 }
 
 function unsupportedReasonForLocalSpawn(): string | undefined {
-  if (!existsSync(HERMES_REPO)) {
-    return `Hermes repo not found at ${HERMES_REPO}.`;
+  if (!existsSync(GETRIDA_REPO)) {
+    return `Hermes repo not found at ${GETRIDA_REPO}.`;
   }
-  if (!existsSync(HERMES_PYTHON)) {
-    return `Hermes Python environment not found at ${HERMES_PYTHON}.`;
+  if (!existsSync(GETRIDA_PYTHON)) {
+    return `Hermes Python environment not found at ${GETRIDA_PYTHON}.`;
   }
   return undefined;
 }
@@ -174,7 +174,7 @@ function dashboardLogPath(profile: string | undefined): string {
 }
 
 function dashboardHasPrebuiltWebDist(): boolean {
-  return existsSync(join(HERMES_REPO, "hermes_cli", "web_dist", "index.html"));
+  return existsSync(join(GETRIDA_REPO, "hermes_cli", "web_dist", "index.html"));
 }
 
 async function getFreePort(): Promise<number> {
@@ -558,17 +558,17 @@ export async function startDashboard(
 
   let proc: ChildProcess;
   try {
-    proc = spawn(HERMES_PYTHON, hermesCliArgs(cliArgs), {
-      cwd: HERMES_REPO,
+    proc = spawn(GETRIDA_PYTHON, hermesCliArgs(cliArgs), {
+      cwd: GETRIDA_REPO,
       env: {
         ...process.env,
         PATH: getEnhancedPath(),
         HOME: process.env.HOME || homedir(),
-        HERMES_HOME,
+        GETRIDA_HOME,
         HERMES_DASHBOARD_SESSION_TOKEN: token,
         HERMES_DESKTOP: "1",
         ...(hasPrebuiltWebDist
-          ? { HERMES_WEB_DIST: join(HERMES_REPO, "hermes_cli", "web_dist") }
+          ? { HERMES_WEB_DIST: join(GETRIDA_REPO, "hermes_cli", "web_dist") }
           : {}),
       },
       stdio: ["ignore", "ignore", stderrFd],

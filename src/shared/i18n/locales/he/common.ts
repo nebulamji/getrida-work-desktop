@@ -1,5 +1,5 @@
 export default {
-  appName: "Hermes Agent",
+  appName: "GetRida Agent",
   continue: "המשך",
   cancel: "ביטול",
   retry: "נסה שוב",

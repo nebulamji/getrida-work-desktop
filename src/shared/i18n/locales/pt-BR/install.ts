@@ -3,7 +3,7 @@ export default {
   startingInstall: "Iniciando instalação",
   installationComplete: "Instalação Concluída",
   installationFailed: "Falha na Instalação",
-  installingHermes: "Instalando Hermes Agent",
+  installingHermes: "Instalando GetRida Agent",
   installationFailedHint:
     "A instalação falhou. Por favor, tente novamente ou instale via terminal.",
   retryInstallation: "Tentar Instalação Novamente",
@@ -25,7 +25,7 @@ export default {
   confirmInstallBtn: "Instalar o Hermes",
   useExistingBtn: "Usar uma instalação existente",
   useExistingHint:
-    "Selecione a pasta que contém sua instalação existente do Hermes (a pasta que contém a pasta hermes-agent).",
+    "Selecione a pasta que contém sua instalação existente do Hermes (a pasta que contém a pasta getrida-agent).",
   useExistingInvalid:
     "Nenhuma instalação utilizável do Hermes foi encontrada nessa pasta.",
   useExistingDone:

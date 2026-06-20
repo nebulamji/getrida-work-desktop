@@ -10,7 +10,7 @@ import {
 import { join } from "path";
 import { Buffer } from "buffer";
 import type { SshConfig } from "./ssh-tunnel";
-import { HERMES_HOME, HERMES_REPO } from "./installer";
+import { GETRIDA_HOME, GETRIDA_REPO } from "./installer";
 import { sshExec } from "./ssh-remote";
 
 export const HERMES_AGENT_COMPAT_VERSION =
@@ -57,7 +57,7 @@ const MODEL_LIBRARY_COMPAT_SOURCE = `
 # Compatibility endpoint installed by Hermes One. Upstream Hermes Agent exposes
 # /api/model/options and /api/model/set, but Hermes One also needs a small
 # configured-model shortcut library for remote/SSH model pickers. The library is
-# deliberately stored in this agent's HERMES_HOME so remote shortcuts stay on
+# deliberately stored in this agent's GETRIDA_HOME so remote shortcuts stay on
 # the remote host and survive desktop restarts without changing upstream model
 # assignment semantics.
 def _hermes_one_model_library_path():
@@ -218,13 +218,13 @@ def hermes_one_delete_model_library_row(model_id: str):
 `;
 
 function compatMarkerPath(): string {
-  return join(HERMES_HOME, "desktop-compat", "dashboard-embedded-chat.json");
+  return join(GETRIDA_HOME, "desktop-compat", "dashboard-embedded-chat.json");
 }
 
 function writeLocalMarker(result: HermesAgentCompatResult): void {
   try {
     const marker = compatMarkerPath();
-    mkdirSync(join(HERMES_HOME, "desktop-compat"), { recursive: true });
+    mkdirSync(join(GETRIDA_HOME, "desktop-compat"), { recursive: true });
     writeFileSync(
       marker,
       JSON.stringify(
@@ -397,7 +397,7 @@ export function writeCompatFileAtomically(path: string, source: string): void {
 }
 
 export function ensureLocalDashboardCompatibility(): HermesAgentCompatResult {
-  const path = join(HERMES_REPO, "hermes_cli", "web_server.py");
+  const path = join(GETRIDA_REPO, "hermes_cli", "web_server.py");
   try {
     const source = readFileSync(path, "utf-8");
     const patched = patchDashboardCompatibilitySource(source);

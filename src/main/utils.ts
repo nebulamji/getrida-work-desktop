@@ -8,7 +8,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "fs";
-import { HERMES_HOME } from "./installer";
+import { GETRIDA_HOME } from "./installer";
 
 const PROFILE_NAME_RE = /^[a-z0-9_][a-z0-9_-]{0,63}$/;
 export const PROFILE_NAME_ERROR =
@@ -53,7 +53,7 @@ export function normalizeProfileName(profile?: unknown): string | undefined {
  */
 export function profileHome(profile?: unknown): string {
   const normalized = normalizeProfileName(profile);
-  return normalized ? join(HERMES_HOME, "profiles", normalized) : HERMES_HOME;
+  return normalized ? join(GETRIDA_HOME, "profiles", normalized) : GETRIDA_HOME;
 }
 
 /**
@@ -104,7 +104,7 @@ export function pidIsAlive(pid: number): boolean {
  * "some Windows process exists at this PID" — it doesn't confirm that
  * process is ours.
  *
- * Important for the WSL coexistence case: when HERMES_HOME points into WSL
+ * Important for the WSL coexistence case: when GETRIDA_HOME points into WSL
  * via UNC, the PID file contains a Linux PID. `process.kill(linuxPid, 0)`
  * runs against Windows' PID space; if a random Windows process happens to
  * own that number, EPERM would lie. Verifying the image name (e.g. starts
@@ -178,7 +178,7 @@ export function pidIsAliveAs(
  */
 export function getActiveProfileNameSync(): string {
   try {
-    const activeFile = join(HERMES_HOME, "active_profile");
+    const activeFile = join(GETRIDA_HOME, "active_profile");
     if (!existsSync(activeFile)) return "default";
     const name = readFileSync(activeFile, "utf-8").trim();
     return name || "default";

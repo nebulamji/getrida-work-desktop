@@ -12,9 +12,9 @@ import {
 // be imported under vitest for the gateway-env regression tests below. Only
 // the names hermes.ts imports from each module need to exist.
 vi.mock("./installer", () => ({
-  HERMES_HOME: "/tmp/hermes-test-home",
-  HERMES_REPO: "/tmp/hermes-test-repo",
-  HERMES_PYTHON: "/usr/bin/python3",
+  GETRIDA_HOME: "/tmp/hermes-test-home",
+  GETRIDA_REPO: "/tmp/hermes-test-repo",
+  GETRIDA_PYTHON: "/usr/bin/python3",
   hermesCliArgs: vi.fn(() => []),
   getEnhancedPath: vi.fn(() => "/usr/bin"),
 }));

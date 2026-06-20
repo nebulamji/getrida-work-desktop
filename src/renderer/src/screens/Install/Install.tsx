@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ArrowRight, Copy, Send } from "../../assets/icons";
 
-const TELEGRAM_COMMUNITY_URL = "https://t.me/hermes_agent_desktop";
+const TELEGRAM_COMMUNITY_URL = "https://getrida.work";
 import { useI18n } from "../../components/useI18n";
 
 interface InstallProgress {

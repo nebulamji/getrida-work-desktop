@@ -23,13 +23,13 @@ export type {
 
 /**
  * The "Discover" marketplace reads its catalog from a public GitHub repo:
- *   https://github.com/hermesonehq/hermes-registry
+ *   https://getrida.work/skills
  *
  * `index.json` is a flat list of entries, each with a `type`
  * (agent|mcp|skill|workflow) and a `path` to its folder in the repo. "Set up"
  * actions download the entry's files into the active profile.
  */
-const REGISTRY_REPO = "fathah/hermes-registry";
+const REGISTRY_REPO = "nebulamji/getrida-work-desktop";
 const REGISTRY_BRANCH = "main";
 const REGISTRY_RAW_BASE = `https://raw.githubusercontent.com/${REGISTRY_REPO}/refs/heads/${REGISTRY_BRANCH}`;
 const REGISTRY_REPO_BASE = `https://github.com/${REGISTRY_REPO}/tree/${REGISTRY_BRANCH}`;

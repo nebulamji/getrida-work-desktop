@@ -57,7 +57,7 @@ export const ChatEmptyState = memo(function ChatEmptyState({
         <span
           className="chat-empty-logo"
           role="img"
-          aria-label="Hermes"
+          aria-label="GetRida Work"
           style={{
             maskImage: `url(${titleLine})`,
             WebkitMaskImage: `url(${titleLine})`,

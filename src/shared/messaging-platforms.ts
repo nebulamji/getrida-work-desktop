@@ -211,7 +211,7 @@ export const MESSAGING_TOOLSET_DEFINITIONS: MessagingToolsetDefinition[] = [
 ];
 
 const HERMES_MESSAGING_DOCS =
-  "https://hermes-agent.nousresearch.com/docs/user-guide/messaging";
+  "https://getrida.work/docs/messaging";
 
 function messagingDocs(slug: string): string {
   return `${HERMES_MESSAGING_DOCS}/${slug}/`;

@@ -3,7 +3,7 @@ export default {
   startingInstall: "מתחיל בהתקנה",
   installationComplete: "ההתקנה הושלמה",
   installationFailed: "ההתקנה נכשלה",
-  installingHermes: "מתקין את Hermes Agent",
+  installingHermes: "מתקין את GetRida Agent",
   installationFailedHint: "ההתקנה נכשלה. אנא נסו שוב או התקינו דרך הטרמינל.",
   retryInstallation: "נסה התקנה שוב",
   copied: "הועתק!",
@@ -22,7 +22,7 @@ export default {
   confirmInstallBtn: "התקנת Hermes",
   useExistingBtn: "שימוש בהתקנה קיימת",
   useExistingHint:
-    "בחרו את התיקייה שמכילה את התקנת Hermes הקיימת שלכם (זו שמכילה את התיקייה hermes-agent).",
+    "בחרו את התיקייה שמכילה את התקנת Hermes הקיימת שלכם (זו שמכילה את התיקייה getrida-agent).",
   useExistingInvalid: "לא נמצאה התקנת Hermes תקינה בתיקייה זו.",
   useExistingDone:
     "ההתקנה הקיימת הוגדרה - צאו ופתחו מחדש את Hermes כדי להחיל אותה.",

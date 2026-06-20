@@ -1,5 +1,5 @@
-appId: com.nousresearch.hermes
-productName: Hermes One
+appId: work.getrida.desktop
+productName: GetRida Work Desktop
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ asarUnpack:
   - resources/**
   - node_modules/better-sqlite3/build/Release/*.node
 win:
-  executableName: hermes-agent
+  executableName: getrida-work
   target:
     - nsis
     - portable
@@ -47,27 +47,26 @@ linux:
     - snap
     - deb
     - rpm
-  maintainer: electronjs.org
-  vendor: Nous Research
+  maintainer: nebulamji
+  vendor: GetRida
   category: Utility
-  synopsis: Self-improving AI assistant desktop app
+  synopsis: GetRida Work Desktop — AI Growth Operator command center
   description: >-
-    Hermes One is a native desktop app for installing, configuring, and chatting
-    with Hermes Agent — a self-improving AI assistant with tool use, multi-platform
-    messaging, and a closed learning loop.
+    GetRida Work Desktop is the command center for your AI Growth Operator.
+    Manage leads, outbound, content, community, and your operator portal
+    from one native app.
 appImage:
   artifactName: ${name}-${version}.${ext}
 deb:
   # Run chmod 4755 on chrome-sandbox so Electron's setuid sandbox helper
   # works on modern Linux distros that disable unprivileged user
-  # namespaces (Ubuntu 24.04+, etc.). Closes #395.
+  # namespaces (Ubuntu 24.04+, etc.).
   afterInstall: build/linux-after-install.sh
 rpm:
   artifactName: ${name}-${version}.${ext}
-  # Same SUID fix for .rpm consumers (Fedora 40+ also restricts userns).
   afterInstall: build/linux-after-install.sh
 npmRebuild: false
 publish:
   provider: github
-  owner: fathah
-  repo: hermes-desktop
+  owner: nebulamji
+  repo: getrida-work-desktop

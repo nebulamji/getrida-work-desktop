@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { execFile } from "child_process";
-import { HERMES_HOME, HERMES_PYTHON, hermesCliArgs } from "./installer";
+import { GETRIDA_HOME, GETRIDA_PYTHON, hermesCliArgs } from "./installer";
 import { profileHome } from "./utils";
 import {
   isRemoteMode,
@@ -199,10 +199,10 @@ function runCronCommand(
 
   return new Promise((resolve) => {
     execFile(
-      HERMES_PYTHON,
+      GETRIDA_PYTHON,
       cliArgs,
       {
-        cwd: join(HERMES_HOME, "hermes-agent"),
+        cwd: join(GETRIDA_HOME, "hermes-agent"),
         timeout: 15000,
         ...HIDDEN_SUBPROCESS_OPTIONS,
       },
